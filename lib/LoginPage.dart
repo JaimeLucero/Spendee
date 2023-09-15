@@ -56,14 +56,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                'LOG IN',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
               const SizedBox(
                 height: 20,
               ),
@@ -132,6 +124,61 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                         }),
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                width: 165,
+                height: 45,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: const Color(0xFFF1916D),
+                ),
+                child: const Center(
+                  child: Text(
+                    "LOG IN",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Sign Up",
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w100,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+              const SizedBox(height: 20,),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image(
+                    width: 30,
+                    height: 30,
+                    image: AssetImage(
+                      'assets/google_logo.png'
+                      ),),
+                  SizedBox(width: 50,),
+                  Image(
+                    width: 45,
+                    height: 45,
+                    image: AssetImage(
+                      'assets/fb_logo.png'
+                      )),
+                ],
+              ),
+              const SizedBox(
+                height: 200,
               )
             ],
           ),
