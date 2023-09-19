@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spendee/SignupPage.dart';
 
 void main() {
   runApp(const LoginPage());
@@ -149,13 +150,20 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               const SizedBox(
                 height: 20,
               ),
-              const Text(
-                "Sign Up",
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w100,
-                  decoration: TextDecoration.underline,
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                  },
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w100,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 20,),
