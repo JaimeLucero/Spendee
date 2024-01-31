@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spendee/SignupPage.dart';
+import 'package:spendee/Pages/SignupPage.dart';
 
 void main() {
   runApp(const LoginPage());
@@ -153,7 +153,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               Container(
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));
                   },
                   child: const Text(
                     "Sign Up",

@@ -149,7 +149,7 @@ class _SignupPageWidgetState extends State<SignupPageWidget> {
                   ]),
                 ),
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Container(
               width: 165,
               height: 45,
@@ -168,7 +168,7 @@ class _SignupPageWidgetState extends State<SignupPageWidget> {
                 ),
               ),
             ),
-            SizedBox(height: 20,)
+            const SizedBox(height: 20,)
             ],
           ),
         ]),

@@ -1,0 +1,25 @@
+{
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-21",
+            "path": "/Users/jaimeemanuellucero/Downloads/graalvm-jdk-21.0.1+12.1/Contents/Home",
+            "default": true
+        }
+    ],
+    "graalvm.home": "/Users/jaimeemanuellucero/Downloads/graalvm-jdk-21.0.1+12.1/Contents/Home",
+    "graalvm.installations": [
+        "/Users/jaimeemanuellucero/Downloads/graalvm-jdk-21.0.1+12.1/Contents/Home"
+    ],
+    "terminal.integrated.env.osx": {
+        "GRAALVM_HOME": "/Users/jaimeemanuellucero/Downloads/graalvm-jdk-21.0.1+12.1/Contents/Home",
+        "JAVA_HOME": "/Users/jaimeemanuellucero/Downloads/graalvm-jdk-21.0.1+12.1/Contents/Home",
+        "PATH": "/Users/jaimeemanuellucero/Downloads/graalvm-jdk-21.0.1+12.1/Contents/Home/bin:${env:PATH}"
+    },
+    "java.home": "/Users/jaimeemanuellucero/Downloads/graalvm-jdk-21.0.1+12.1/Contents/Home",
+    "maven.terminal.customEnv": [
+        {
+            "environmentVariable": "JAVA_HOME",
+            "value": "/Users/jaimeemanuellucero/Downloads/graalvm-jdk-21.0.1+12.1/Contents/Home"
+        }
+    ]
+}
