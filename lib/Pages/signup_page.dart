@@ -16,6 +16,8 @@ class _SignupPageState extends State<SignupPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordConfirmController = TextEditingController();
+  bool _obscurePass = true;
+  bool _obscureConfirmPass = true;
 
   //Image picker for user's profile picture
   File? image;
@@ -30,7 +32,45 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 
-  void showErrorMessage(String message) {
+
+  //user sign up method
+  void signUpUser() async {
+  // Check if passwords match
+  if (_passwordController.text == _passwordConfirmController.text) {
+    // Passwords match, proceed with sign-up
+    try {
+      // Display loading circle
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
+      // Create user with email and password
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Dismiss loading circle
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      // Error occurred during sign-up, show error message
+      Navigator.pop(context); // Dismiss loading circle
+      showErrorMessage(e.code);
+    }
+  } else {
+    // Passwords don't match, show error message
+    showErrorMessage("Password does not match!");
+  }
+}
+
+
+    void showErrorMessage(String message) {
     showDialog(
         context: context,
         builder: (context) {
@@ -45,35 +85,6 @@ class _SignupPageState extends State<SignupPage> {
         });
   }
 
-  //user sign up method
-  void signUpUser() async {
-    //display loading circle
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
-
-    //try creating user
-    try {
-      if (_passwordController == _passwordConfirmController) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim());
-      } else {
-        showErrorMessage("Password does not match!");
-      }
-      //stop loading circle
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      //stop loaading circle
-      Navigator.pop(context);
-      //show error if sign up fail
-      showErrorMessage(e.code);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,21 +191,48 @@ class _SignupPageState extends State<SignupPage> {
                         TextField(
                           style: const TextStyle(color: Colors.white),
                           controller: _passwordController,
-                          decoration: const InputDecoration(
-                              hintText: 'Password',
-                              hintStyle: TextStyle(color: Colors.white54),
-                              enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey))),
+                          obscureText: _obscurePass,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePass
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _obscurePass = !_obscurePass;
+                                  });
+                                }),
+                            hintText: 'Password',
+                            hintStyle: const TextStyle(color: Colors.white54),
+                            enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey)),
+                          ),
                         ),
                         const SizedBox(
                           height: 10,
                         ),
-                        const TextField(
-                          style: TextStyle(color: Colors.white),
+                        TextField(
+                          style: const TextStyle(color: Colors.white),
+                          controller: _passwordConfirmController,
+                          obscureText: _obscureConfirmPass,
                           decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscureConfirmPass
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureConfirmPass =
+                                          !_obscureConfirmPass;
+                                    });
+                                  }),
                               hintText: 'Confirm Password',
-                              hintStyle: TextStyle(color: Colors.white54),
-                              enabledBorder: UnderlineInputBorder(
+                              hintStyle: const TextStyle(color: Colors.white54),
+                              enabledBorder: const UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey))),
                         ),
                       ]),
@@ -203,20 +241,23 @@ class _SignupPageState extends State<SignupPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    width: 165,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: const Color(0xFFF1916D),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "LOG IN",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w900,
+                  GestureDetector(
+                    onTap: signUpUser,
+                    child: Container(
+                      width: 165,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: const Color(0xFFF1916D),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "SIGN UP",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
                     ),

@@ -13,22 +13,29 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _obscureText = true;
   final _emailController = TextEditingController();
+  bool _isEmailValid = true;
   final _passwordController = TextEditingController();
+  bool _isPasswordValid = true;
 
-  void showErrorMessage(String message) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.deepPurple,
-            title: Center(
-                child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
-            )),
-          );
-        });
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
+
+  void showErrorMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(color: Colors.white),
+        ),
+        duration: Duration(seconds: 2), // Adjust duration as needed
+      ),
+    );
+  }
+
 
   void signInUser() async {
     //display loading circle
@@ -51,20 +58,38 @@ class _LoginPageState extends State<LoginPage> {
       //stop loaading circle
       Navigator.pop(context);
       //show error if sign up fail
-      showErrorMessage(e.code);
+      showErrorMessage(context, e.code);
     }
   }
 
+  void _validateEmail(String email) {
+    final RegExp emailRegex = RegExp(
+      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    setState(() {
+      _isEmailValid = emailRegex.hasMatch(email);
+    });
+  }
+
+  void _validatePassword(String password) {
+    setState(() {
+      _isPasswordValid = password.length >= 8;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          color: Color(0xff000111),
+          color: const Color(0xff000111),
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(top: 100),
+              padding: const EdgeInsets.only(top: 70),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -89,70 +114,85 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(
                     width: 270,
-                    height: 45,
-                    child: TextField(
-                      controller: _emailController,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                      decoration: const InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: TextStyle(
-                          color: Colors.white54,
-                        ),
-                        filled: true,
-                        fillColor: Color(0x50473E66),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                        prefixIcon: Image(
-                            image: AssetImage(
-                                'assets/head_icon.png')), // Adjust vertical padding
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: 270,
-                    height: 45,
-                    child: TextField(
-                      controller: _passwordController,
-                      obscureText: _obscureText,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: const TextStyle(
-                          color: Colors.white54,
-                        ),
-                        filled: true,
-                        fillColor: const Color(0x50473E66),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 10),
-                        prefixIcon: const Image(
-                            image: AssetImage('assets/lock_icon.png')),
-                        suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                    height: 175, // Specify a common height for both input fields
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _emailController,
+                          onChanged: _validateEmail,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: 'Email',
+                            hintStyle: const TextStyle(
+                              color: Colors.white54,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            }),
-                      ),
+                            filled: true,
+                            fillColor: const Color(0x50473E66),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50)),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10),
+                            prefixIcon: const Image(
+                              image: AssetImage('assets/head_icon.png'),
+                            ),
+                            errorText:
+                                _isEmailValid ? null : 'Invalid email format',
+                            errorStyle: const TextStyle(fontSize: 10),
+                          ),
+                        ),
+                        const SizedBox(
+                            height:
+                                15), // Add some vertical space for the error message
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: _obscureText,
+                          onChanged: _validatePassword,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            hintStyle: const TextStyle(
+                              color: Colors.white54,
+                            ),
+                            filled: true,
+                            fillColor: const Color(0x50473E66),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50)),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10),
+                            prefixIcon: const Image(
+                              image: AssetImage('assets/lock_icon.png'),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscureText
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                            ),
+                            errorText: _isPasswordValid
+                                ? null
+                                : 'Password must be 8 or more characters',
+                            errorStyle: const TextStyle(fontSize: 10),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(
