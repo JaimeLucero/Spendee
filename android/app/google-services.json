@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "346615412061",
+    "firebase_url": "https://spendee-d4216-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "spendee-d4216",
+    "storage_bucket": "spendee-d4216.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346615412061:android:25fee47c63956dd61c64b4",
+        "android_client_info": {
+          "package_name": "com.example.spendee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346615412061-3p7j8a3ta3aeb2nnm9he1nrldptertnf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATcFPBEGDplHyGFirgh8RApb7RGZPZx14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346615412061-3p7j8a3ta3aeb2nnm9he1nrldptertnf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "346615412061-nhgjm3d5a19ki6c590q10ol94jp4o96c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.spendee.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
