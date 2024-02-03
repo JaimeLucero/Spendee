@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,12 +16,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [IconButton(onPressed: signOutUser, icon: Icon(Icons.logout)),]),
-      body: Center(
+      appBar: AppBar(actions: [IconButton(onPressed: signOutUser, icon: const Icon(Icons.logout)),]),
+      body: const Center(
         child: Column(
           children: [
-            Text("User Loged In"),
-            
+            Text("User Logged In"),
           ],
         ),
       ),

@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:spendee/Pages/home_page.dart';
 import 'package:spendee/Pages/login_or_signup_page.dart';
-import 'package:spendee/Pages/login_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -16,10 +14,10 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             //if user is signed in
-            return HomePage();
+            return const HomePage();
           } else {
             //if user is not signed int
-            return LoginOrSignupPage();
+            return const LoginOrSignupPage();
           }
         },
       ),
