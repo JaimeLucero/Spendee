@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:spendee/Data/firestore_methods.dart';
+import 'package:spendee/Data/firestore_service.dart';
 import 'package:spendee/Data/user.dart';
 
 class SignupPage extends StatefulWidget {
@@ -22,12 +22,11 @@ class _SignupPageState extends State<SignupPage> {
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
   final _phoneNumber = TextEditingController();
+  late String completePhoneNumber;
   DateTime _birthday = DateTime.now();
   final int _currentYear = DateTime.now().year;
-  String _profileUrl = '';
+  late String _profileUrl;
   late SignedinUser user;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   //booleans for input validation
   bool _isEmailValid = true;
@@ -164,10 +163,8 @@ class _SignupPageState extends State<SignupPage> {
                         style: const TextStyle(color: Colors.white),
                         dropdownTextStyle: const TextStyle(color: Colors.white),
                         onChanged: (phone) {
-                          _phoneNumber.text =
-                              '+${phone.countryCode}${phone.number}';
-                          _validatePhoneNumber();
-                          print(phone.completeNumber);
+                          _validatePhoneNumber(
+                              '${phone.countryCode}${phone.number}');
                         },
                       ),
                       TextField(
@@ -320,17 +317,13 @@ class _SignupPageState extends State<SignupPage> {
   Future<void> signUpUser() async {
     // Check if passwords match
     if (_passwordController.text == _passwordConfirmController.text) {
-      print("password match");
       // check if inputted email is valid
       if (_isEmailValid) {
-        print('email valid');
         //check if inputted password is valid
         if (_isPasswordValid) {
-          print('password valid');
           if (isOlderThan16(_birthday)) {
             //check if phone number input is valid
             if (_isPhoneValid) {
-              print('phone is valid');
               // if input is valid try to create the user
               try {
                 // Display loading circle
@@ -349,6 +342,7 @@ class _SignupPageState extends State<SignupPage> {
                       await FirebaseService().uploadImageToFirebase(image!);
                   isProfileSavedToFirestore = true;
                 } catch (e) {
+                  // ignore: use_build_context_synchronously
                   showErrorMessage(context, e.toString());
                 }
 
@@ -356,8 +350,7 @@ class _SignupPageState extends State<SignupPage> {
                 user = SignedinUser(
                   firstName: capitalizeFirstLetter(_firstName.text),
                   lastName: capitalizeFirstLetter(_lastName.text),
-                  password: _passwordController.text,
-                  phoneNumber: _phoneNumber.text,
+                  phoneNumber: completePhoneNumber,
                   profile: _profileUrl,
                   email: _emailController.text,
                 );
@@ -380,10 +373,10 @@ class _SignupPageState extends State<SignupPage> {
                     password: _passwordController.text.trim(),
                   );
                   // The user is created successfully, and you can now access the UID
-                  String _uid = userCredential.user!.uid;
+                  String uid = userCredential.user!.uid;
 
                   // Set the UID as the document ID in Firestore
-                  user.uId = _uid;
+                  user.uId = uid;
                 }
                 // Dismiss loading circle
                 Navigator.pop(context);
@@ -469,18 +462,25 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   //validate inputted phone number
-  void _validatePhoneNumber() {
+  void _validatePhoneNumber(String phone) {
     setState(() {
+      print(phone);
       String regexPattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
-      var regExp = new RegExp(regexPattern);
-      if (_phoneNumber.text.isEmpty) {
+      var regExp = RegExp(regexPattern);
+
+      //check if phone number is correct length and matches regex
+      if (_phoneNumber.text.length < 10) {
         _isPhoneValid = false;
-      } else if (regExp.hasMatch(_phoneNumber.text)) {
+      } else if (regExp.hasMatch(phone)) {
+        completePhoneNumber = phone;
         _isPhoneValid = true;
+      } else {
+        _isPhoneValid = false;
       }
     });
   }
 
+  //validate user's age if they are 16 or older
   bool isOlderThan16(DateTime selectedBirthday) {
     // Calculate today's date
     DateTime today = DateTime.now();
@@ -495,7 +495,7 @@ class _SignupPageState extends State<SignupPage> {
       age--;
     }
 
-    // Check if the calculated age is greater than 14
+    // Check if the calculated age is greater than 16
     return age >= 16;
   }
 

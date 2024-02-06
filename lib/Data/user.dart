@@ -1,4 +1,3 @@
-import 'dart:io';
 
 class SignedinUser {
   String firstName;
@@ -6,13 +5,11 @@ class SignedinUser {
   late String uId;
   String phoneNumber;
   String email;
-  String password;
   String profile;
 
   SignedinUser(
       {required this.firstName,
       required this.lastName,
-      required this.password,
       required this.phoneNumber,
       required this.profile,
       required this.email});
@@ -21,9 +18,8 @@ class SignedinUser {
   Map<String, dynamic> toJson() {
     return {
       'email': email,
-      'password': password,
       'phoneNumber': phoneNumber,
-      'firsName': firstName,
+      'firstName': firstName,
       'lastName': lastName,
       'profile': profile,
     };

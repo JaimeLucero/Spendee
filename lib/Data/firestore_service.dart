@@ -4,12 +4,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:spendee/Data/user.dart';
 
 final FirebaseStorage _storage = FirebaseStorage.instance;
-final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
+final CollectionReference usersCollection =
+    FirebaseFirestore.instance.collection('users');
 
 class FirebaseService {
-
   FirebaseService();
-
 
   Future<String> uploadImageToFirebase(File imageSelected) async {
     try {
@@ -32,11 +31,11 @@ class FirebaseService {
     }
   }
 
-  Future<void> addUserToFirestore( SignedinUser user) async {
+  Future<void> addUserToFirestore(SignedinUser user) async {
     try {
       // Convert User object to map
       Map<String, dynamic> userData = user.toJson();
-      
+
       // Set user data in Firestore
       await usersCollection.doc(user.email).set(userData);
     } catch (e) {
@@ -44,16 +43,27 @@ class FirebaseService {
     }
   }
 
-  // Future<void> storeUserInfo(SignedinUser user) async {
-  //   try {
-  //     Map<String, dynamic> userInfo = user.toJson();
-  //     await _firestore.collection('users').doc(userInfo['uid']).set({
-  //       'displayName': displayName,
-  //       // Add more fields as needed
-  //     });
-  //   } catch (e) {
-  //     print('Error storing user info: $e');
-  //     throw e; // Rethrow the exception to handle it elsewhere if needed
-  //   }
-  // }
+  Future<Map<String, dynamic>?> getDocument(
+      String collection, String documentId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .doc(documentId)
+              .get();
+
+      if (documentSnapshot.exists) {
+        // Document exists, return its data
+        Map<String, dynamic> data = documentSnapshot.data()!;
+        return data;
+      } else {
+        // Document does not exist
+        print("Document does not exist");
+        return null;
+      }
+    } catch (e) {
+      print("Error retrieving document: $e");
+      return null;
+    }
+  }
 }

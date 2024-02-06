@@ -54,13 +54,13 @@ class _LoginPageState extends State<LoginPage> {
           email: _emailController.text.trim(),
           password: _passwordController.text.trim());
       //stop loading circle
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      //stop loaading circle
-      Navigator.pop(context);
       //show error if sign up fail
       showErrorMessage(context, e.code);
     }
+    if (mounted) {
+  Navigator.pop(context);
+}
   }
 
   //email input validation
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
       _isPasswordValid = password.length >= 8;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,8 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                           filled: true,
                           fillColor: const Color(0x50473E66),
                           border: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50)),
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
                             borderSide: BorderSide.none,
                           ),
                           contentPadding: const EdgeInsets.symmetric(
@@ -166,8 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                           filled: true,
                           fillColor: const Color(0x50473E66),
                           border: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50)),
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
                             borderSide: BorderSide.none,
                           ),
                           contentPadding: const EdgeInsets.symmetric(
@@ -196,7 +194,9 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 GestureDetector(
                   onTap: signInUser,
                   child: Container(

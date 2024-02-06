@@ -4,7 +4,8 @@ import 'package:spendee/Pages/home_page.dart';
 import 'package:spendee/Pages/login_or_signup_page.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+
+  AuthPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +14,14 @@ class AuthPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            //if user is signed in
-            return const HomePage();
+            return HomePage();
           } else {
-            //if user is not signed int
+            // User is not signed in, display login/signup page
             return const LoginOrSignupPage();
           }
         },
       ),
     );
   }
+
 }
